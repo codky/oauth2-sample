@@ -1,0 +1,15 @@
+
+spring:
+  application:
+    name: biz-sample
+  security:
+    oauth2:
+      resource-server:
+        jwt:
+          issuer-uri: http://localhost:8089/auth/realms/my_realm
+
+logging:
+  level:
+    org.example: debug
+
+server.port: 8040

@@ -1,0 +1,46 @@
+
+spring:
+  application:
+    name: gateway-sample
+  cloud:
+    gateway:
+      default-filters:
+        - TokenRelay
+      routes:
+        - id: gateway-sample
+          uri: http://localhost:8040
+          predicates:
+            - Path=/api/**
+          filters:
+            - RemoveRequestHeader=Cookie
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            token-uri: http://localhost:8089/auth/realms/my_realm/protocol/openid-connect/token
+            authorization-uri: http://localhost:8089/auth/realms/my_realm/protocol/openid-connect/auth
+            user-info-uri: http://localhost:8089/auth/realms/my_realm/protocol/openid-connect/userinfo
+            user-name-attribute: preferred_username
+        registration:
+          my_client_a:
+            provider: keycloak
+            client-id: my_client_a
+            client-secret: 8aa0ef44-ce14-451a-82f2-b768347445e8
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
+          my_client_b:
+            provider: keycloak
+            client-id: my_client_b
+            client-secret: ac9feac9-1783-40ad-9436-1e9c77434ae3
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
+  main:
+    allow-bean-definition-overriding: true
+
+
+server:
+  port: 8060
+logging:
+  level:
+    com.example: debug
